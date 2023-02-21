@@ -42,7 +42,7 @@ requirements:
   run:
     - xorg-compositeproto
     - xorg-xproto
-    - {{ pin_compatible('xorg-libx11', max_pin='x') }}
+    - {{ pin_compatible('xorg-libx11') }}
     - xorg-libxfixes
 
 test:
