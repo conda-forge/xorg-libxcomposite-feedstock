@@ -19,6 +19,14 @@ else
     uprefix="$PREFIX"
 fi
 
+configure_args=(
+    --prefix=$mprefix
+    --disable-static
+    --disable-dependency-tracking
+    --disable-selective-werror
+    --disable-silent-rules
+)
+
 # On Windows we need to regenerate the configure scripts.
 if [ -n "$CYGWIN_PREFIX" ] ; then
     am_version=1.16 # keep sync'ed with meta.yaml
@@ -37,19 +45,15 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     platlibs=$(cd $(dirname $($CC --print-prog-name=ld))/../sysroot/usr/lib && pwd -W)
     test -f $platlibs/libws2_32.a || { echo "error locating libws2_32" ; exit 1 ; }
     export LDFLAGS="$LDFLAGS -L$platlibs"
+
+    # m2w64 v15 workaround: https://github.com/conda-forge/m2-binary-packages-feedstock/pull/29
+    configure_args+=(--build=x86_64-pc-cygwin --host=x86_64-pc-cygwin)
 else
     # Get an updated config.sub and config.guess
     cp -f $BUILD_PREFIX/share/gnuconfig/config.* .
 fi
 
 export PKG_CONFIG_LIBDIR=$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig
-configure_args=(
-    --prefix=$mprefix
-    --disable-static
-    --disable-dependency-tracking
-    --disable-selective-werror
-    --disable-silent-rules
-)
 
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT

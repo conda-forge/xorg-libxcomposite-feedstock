@@ -15,7 +15,7 @@ source:
   sha256: {{ sha256 }}
 
 build:
-  number: 0
+  number: 1
   run_exports:
     - {{ pin_subpackage(name|lower) }}
 
@@ -24,8 +24,8 @@ requirements:
     - m2-autoconf                  # [win]
     - m2-automake{{ am_version }}  # [win]
     - m2-libtool                   # [win]
-    - pkg-config                   # [unix]
-    - m2-pkg-config                # [win]
+    - pkgconf                      # [unix]
+    - m2-pkgconf                   # [win]
     - gnuconfig                    # [unix]
     - m2-base                      # [win]
     - make                         # [unix]
